@@ -58,7 +58,7 @@ def all_complete(event, context):
     top_ten_csv.seek(0)
     storage_client.get_bucket('category_csv_file').blob('top_ten_pages.csv').upload_from_file(top_ten_csv, content_type='text/csv')
 
-    #top 10 pages based on fan count As JSON
+    #top ten pages based on fan count As JSON
     top_ten = pages_df.nlargest(10, 'fan_count')[["name","fan_count"]]
     top_ten_json = StringIO()
     top_ten.to_json(top_ten_json)
