@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nodered
+  name: nodered
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodered
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nodered
+    spec:
+      containers:
+      - image: nodered/node-red-docker
+        name: nodered
+        ports:
+        - containerPort: 1880
+        volumeMounts:
+          - mountPath: /etc/secrets/
+            name: secrets
+            readOnly: true
+        resources:
+          limits:
+            cpu: 700m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+      volumes:
+        - name: secrets
+          secret:
+            defaultMode: 420
+            secretName: nodered-secret
+
+status: {}

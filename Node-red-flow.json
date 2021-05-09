@@ -1,0 +1,560 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Complete",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "12f15d4d.c398b3",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "filename1",
+        "func": "msg.filename = msg.payload.toString();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 320,
+        "y": 500,
+        "wires": [
+            [
+                "ddee4daf.0216a"
+            ]
+        ]
+    },
+    {
+        "id": "bfd88712.5bcab8",
+        "type": "google-cloud-pubsub in",
+        "z": "f6f2187d.f17ca8",
+        "account": "",
+        "keyFilename": "/etc/secrets/iot-project-group6-7245b6b6144b.json",
+        "subscription": "projects/iot-project-group6/subscriptions/cat-count-piechart-sub",
+        "assumeJSON": false,
+        "name": "CategoryCount",
+        "x": 120,
+        "y": 500,
+        "wires": [
+            [
+                "12f15d4d.c398b3"
+            ]
+        ]
+    },
+    {
+        "id": "ddee4daf.0216a",
+        "type": "google-cloud-gcs-read",
+        "z": "f6f2187d.f17ca8",
+        "account": "",
+        "keyFilename": "/etc/secrets/iot-project-group6-7245b6b6144b.json",
+        "filename": "",
+        "list": false,
+        "name": "",
+        "x": 480,
+        "y": 500,
+        "wires": [
+            [
+                "191cfcfe.fb6103"
+            ]
+        ]
+    },
+    {
+        "id": "191cfcfe.fb6103",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "to-piechart",
+        "func": "let array = [];\nlet msg2 = msg.payload;\nvar msg1 = JSON.parse(msg2.toString());\n\nvar colors_list = [\"Pink\", \"Crimson\", \"Red\", \"Maroon\", \"Brown\", \"Misty Rose\", \"Salmon\", \"Coral\", \"Orange-Red\", \"Chocolate\", \"Orange\", \"Gold\", \"Ivory\", \"Yellow\", \"Olive\", \"Yellow-Green\", \"Lawn-green\", \"Chartreuse\", \"Lime\", \"Green\", \"Spring green\", \"Aquamarine\", \"Turquoise\", \"Azure\", \"Aqua/Cyan\", \"Teal\", \"Lavender\", \"Blue\", \"Navy\", \"Blue-Violet\", \"Indigo\", \"Dark-Violet\", \"Plum\", \"Magenta\", \"Purple\", \"Red-Violet\", \"Tan\", \"Beige\", \"Slate gray\", \"White\", \"Silver\", \"Grey\", \"Black\", \"aqua\", \"yellow\", \"red\", \"purple\", \"fuchsia\"];\n \t \t \t \t \t\n\nfor(var key in msg1){\n  //console.log(msg[key]);\n  let dict = {};\n  dict['x'] = key;\n  dict['y'] = msg1[key];\n  array.push(dict);\n  }\n\nmsg.payload= { \"channel\": \"Category-count\", \n                \"color\": colors_list, \n                \"dataset\": array \n    \n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 630,
+        "y": 500,
+        "wires": [
+            [
+                "d9b0ba3a.ab2168",
+                "f8889148.9bb97"
+            ]
+        ]
+    },
+    {
+        "id": "4f3b6a2d.b78c14",
+        "type": "google-cloud-pubsub in",
+        "z": "f6f2187d.f17ca8",
+        "account": "",
+        "keyFilename": "/etc/secrets/iot-project-group6-7245b6b6144b.json",
+        "subscription": "projects/iot-project-group6/subscriptions/cat-count-barchart-sub",
+        "assumeJSON": false,
+        "name": "CategoryCount",
+        "x": 120,
+        "y": 620,
+        "wires": [
+            [
+                "e54c7033.c9a6e"
+            ]
+        ]
+    },
+    {
+        "id": "e54c7033.c9a6e",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "filename2",
+        "func": "msg.filename = msg.payload.toString();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 320,
+        "y": 620,
+        "wires": [
+            [
+                "6d7e5ab3.199024"
+            ]
+        ]
+    },
+    {
+        "id": "6d7e5ab3.199024",
+        "type": "google-cloud-gcs-read",
+        "z": "f6f2187d.f17ca8",
+        "account": "",
+        "keyFilename": "/etc/secrets/iot-project-group6-7245b6b6144b.json",
+        "filename": "",
+        "list": false,
+        "name": "",
+        "x": 480,
+        "y": 620,
+        "wires": [
+            [
+                "7ea0fbed.a689d4"
+            ]
+        ]
+    },
+    {
+        "id": "7ea0fbed.a689d4",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "to-barchart",
+        "func": "let array = [];\nlet msg2 = msg.payload;\nvar msg1 = JSON.parse(msg2.toString());\n\nvar colors_list = [\"Pink\", \"Crimson\", \"Red\", \"Maroon\", \"Brown\", \"Misty Rose\", \"Salmon\", \"Coral\", \"Orange-Red\", \"Chocolate\", \"Orange\", \"Gold\", \"Ivory\", \"Yellow\", \"Olive\", \"Yellow-Green\", \"Lawn-green\", \"Chartreuse\", \"Lime\", \"Green\", \"Spring green\", \"Aquamarine\", \"Turquoise\", \"Azure\", \"Aqua/Cyan\", \"Teal\", \"Lavender\", \"Blue\", \"Navy\", \"Blue-Violet\", \"Indigo\", \"Dark-Violet\", \"Plum\", \"Magenta\", \"Purple\", \"Red-Violet\", \"Tan\", \"Beige\", \"Slate gray\", \"White\", \"Silver\", \"Grey\", \"Black\", \"aqua\", \"yellow\", \"red\", \"purple\", \"fuchsia\"];\n \t \t \t \t \t\n\nfor(var key in msg1){\n  //console.log(msg[key]);\n  let dict = {};\n  dict['x'] = key;\n  dict['y'] = msg1[key];\n  array.push(dict);\n  }\n\nmsg.payload= { \"channel\": \"Category-count\", \n                \"color\": colors_list, \n                \"dataset\": array \n    \n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 650,
+        "y": 620,
+        "wires": [
+            [
+                "4a50e2f.f2a7f1c",
+                "72b4f3c9.c74ddc"
+            ]
+        ]
+    },
+    {
+        "id": "7cf5be9e.d2b7e",
+        "type": "google-cloud-pubsub in",
+        "z": "f6f2187d.f17ca8",
+        "account": "",
+        "keyFilename": "/etc/secrets/iot-project-group6-7245b6b6144b.json",
+        "subscription": "projects/iot-project-group6/subscriptions/top10pages-sub",
+        "assumeJSON": false,
+        "name": "Top10Pages",
+        "x": 110,
+        "y": 740,
+        "wires": [
+            [
+                "87a04c3a.6b2dc",
+                "fbebd9c6.46d648"
+            ]
+        ]
+    },
+    {
+        "id": "d84210e3.388db",
+        "type": "google-cloud-gcs-read",
+        "z": "f6f2187d.f17ca8",
+        "account": "",
+        "keyFilename": "/etc/secrets/iot-project-group6-7245b6b6144b.json",
+        "filename": "",
+        "list": false,
+        "name": "",
+        "x": 180,
+        "y": 900,
+        "wires": [
+            [
+                "de94f163.a660c"
+            ]
+        ]
+    },
+    {
+        "id": "4eabb37a.6626ac",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table0",
+        "func": "msg.add = msg.payload[0];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 820,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "21fd0f68.8bbd8",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table-title",
+        "func": "msg.add = ['Page-name','fan-count'];\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 620,
+        "y": 780,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "de94f163.a660c",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "creat-sorted-array",
+        "func": "let msg2 = msg.payload;\nvar msg1 = JSON.parse(msg2.toString());\n\nvar array = [];\n\nfor(var key in msg1[\"name\"]){\n  let array_each = [];\n  array_each.push(msg1['name'][key]);\n  array_each.push(msg1['fan_count'][key]);\n  array.push(array_each);\n  }\n \n array_sorted = array.sort(function(a, b) { \n    return a[1] < b[1] ? 1 : -1;\n});\n  \n msg.payload = array_sorted;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 210,
+        "y": 960,
+        "wires": [
+            [
+                "21fd0f68.8bbd8",
+                "4eabb37a.6626ac",
+                "a2c99eb.800436",
+                "88f306b9.0d15c8",
+                "1e25a53a.d6d09b",
+                "a4ee9864.cbf278",
+                "c216bcf1.f9a3",
+                "594fda80.164b64",
+                "5622652f.9a2bdc",
+                "a0ccd7aa.115248",
+                "3ac88d99.11bff2",
+                "a7256976.ba5328"
+            ]
+        ]
+    },
+    {
+        "id": "a2c99eb.800436",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table1",
+        "func": "msg.add = msg.payload[1];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 860,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "88f306b9.0d15c8",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table2",
+        "func": "msg.add = msg.payload[2];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 900,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "1e25a53a.d6d09b",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table3",
+        "func": "msg.add = msg.payload[3];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 940,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "a4ee9864.cbf278",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table4",
+        "func": "msg.add = msg.payload[4];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 980,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "c216bcf1.f9a3",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table5",
+        "func": "msg.add = msg.payload[5];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 1020,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "594fda80.164b64",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table6",
+        "func": "msg.add = msg.payload[6];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 1060,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "87a04c3a.6b2dc",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "clear-table",
+        "func": "msg.clear = true;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 630,
+        "y": 740,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "fbebd9c6.46d648",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "filename3",
+        "func": "msg.filename = msg.payload.toString();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 180,
+        "y": 840,
+        "wires": [
+            [
+                "d84210e3.388db"
+            ]
+        ]
+    },
+    {
+        "id": "5622652f.9a2bdc",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table7",
+        "func": "msg.add = msg.payload[7];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 1100,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "a0ccd7aa.115248",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table8",
+        "func": "msg.add = msg.payload[8];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 1140,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "3ac88d99.11bff2",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "table9",
+        "func": "msg.add = msg.payload[9];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 610,
+        "y": 1180,
+        "wires": [
+            [
+                "2ef18b15.5dfc74"
+            ]
+        ]
+    },
+    {
+        "id": "f8889148.9bb97",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "72b4f3c9.c74ddc",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "a7256976.ba5328",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 290,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "4a50e2f.f2a7f1c",
+        "type": "chartjs-vertical-bar",
+        "z": "f6f2187d.f17ca8",
+        "name": "bar chart",
+        "path": "bar",
+        "charttitle": "Category-count",
+        "xaxis": "Item",
+        "yaxis": "Number of pages",
+        "x": 800,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d9b0ba3a.ab2168",
+        "type": "chartjs-pie",
+        "z": "f6f2187d.f17ca8",
+        "name": "Piechart",
+        "path": "test",
+        "charttitle": "Category-Count",
+        "xaxis": "",
+        "yaxis": "Number of pages",
+        "x": 800,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2ef18b15.5dfc74",
+        "type": "blynk-ws-out-table",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "pin": "1",
+        "client": "b0664de5.b5e1",
+        "x": 960,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "b0664de5.b5e1",
+        "type": "blynk-ws-client",
+        "name": "",
+        "path": "ws://blynk-cloud.com/websockets",
+        "key": "OAHLXeQvHI_RNXxLxpJRQQ7llV3QO-yd",
+        "dbg_all": false,
+        "dbg_read": false,
+        "dbg_write": false,
+        "dbg_notify": false,
+        "dbg_mail": false,
+        "dbg_prop": false,
+        "dbg_sync": false,
+        "dbg_bridge": false,
+        "dbg_low": false,
+        "dbg_pins": "",
+        "multi_cmd": false,
+        "proxy_type": "no",
+        "proxy_url": "",
+        "enabled": true
+    }
+]
